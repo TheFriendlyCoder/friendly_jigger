@@ -5,3 +5,12 @@ solution: friendly_jigger.sln
 script:
   - dotnet restore
   - dotnet publish --self-contained -c Release -r win10-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true
+
+deploy:
+  provider: releases
+  api_key: $DEPLOY_TOKEN
+  file: "./friendly_jigger/bin/Release/netcoreapp3.1/win10-x64/friendly_jigger.exe"
+  skip_cleanup: true
+  draft: true
+  #on:
+  #  tags: true
