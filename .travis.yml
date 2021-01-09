@@ -9,7 +9,9 @@ script:
 deploy:
   provider: releases
   api_key: $DEPLOY_TOKEN
-  file: "./friendly_jigger/bin/Release/netcoreapp3.1/win10-x64/friendly_jigger.exe"
+  file: 
+    - "./friendly_jigger/bin/Release/netcoreapp3.1/win10-x64/friendly_jigger.exe"
+    - "./friendly_jigger/bin/Release/netcoreapp3.1/win10-x64/friendly_jigger.dll"
   skip_cleanup: true
   draft: true
   #on:
