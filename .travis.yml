@@ -1,20 +1,21 @@
 language: csharp
 mono: none
-dotnet: 3.1
+#dotnet: 3.1
+dotnet: 5.0
 solution: friendly_jigger.sln
 script:
   - dotnet publish -c Release -r win10-x64
   - dotnet publish -c Release -r linux-x64
-  - mv "./friendly_jigger/bin/Release/netcoreapp3.1/linux-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/netcoreapp3.1/linux-x64/publish/friendly_jigger_linux"
+  - mv "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger_linux"
   - dotnet publish -c Release -r osx-x64
-  - mv "./friendly_jigger/bin/Release/netcoreapp3.1/osx-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/netcoreapp3.1/osx-x64/publish/friendly_jigger_mac"
+  - mv "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger_mac"
 deploy:
   provider: releases
   api_key: $DEPLOY_TOKEN
   file: 
-    - "./friendly_jigger/bin/Release/netcoreapp3.1/win10-x64/publish/friendly_jigger.exe"
-    - "./friendly_jigger/bin/Release/netcoreapp3.1/linux-x64/publish/friendly_jigger_linux"
-    - "./friendly_jigger/bin/Release/netcoreapp3.1/osx-x64/publish/friendly_jigger_mac"
+    - "./friendly_jigger/bin/Release/net5.0/win10-x64/publish/friendly_jigger.exe"
+    - "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger_linux"
+    - "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger_mac"
   skip_cleanup: true
   draft: true
   #on:
