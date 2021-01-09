@@ -1,0 +1,7 @@
+language: csharp
+mono: none
+dotnet: 3.1
+solution: friendly_jigger.sln
+script:
+  - dotnet restore
+  - dotnet publish --self-contained -c Release -r win10-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true
