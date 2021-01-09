@@ -8,6 +8,9 @@ script:
   - mv "./friendly_jigger/bin/Release/netcoreapp3.1/linux-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/netcoreapp3.1/linux-x64/publish/friendly_jigger_linux"
   - dotnet publish -c Release -r osx-x64
   - mv "./friendly_jigger/bin/Release/netcoreapp3.1/osx-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/netcoreapp3.1/osx-x64/publish/friendly_jigger_mac"
+  - ls -alh "./friendly_jigger/bin/Release/netcoreapp3.1/linux-x64/publish"
+  - ls -alh "./friendly_jigger/bin/Release/netcoreapp3.1/osx-x64/publish"
+  - ls -alh "./friendly_jigger/bin/Release/netcoreapp3.1/win10-x64/publish"
 deploy:
   provider: releases
   api_key: $DEPLOY_TOKEN
