@@ -1,3 +1,4 @@
+os: linux
 language: csharp
 mono: none
 dotnet: 5.0
@@ -8,6 +9,7 @@ script:
   - mv "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger_linux"
   - dotnet publish -c Release -r osx-x64
   - mv "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger_mac"
+
 deploy:
   - provider: releases
     token: $DEPLOY_TOKEN
@@ -17,6 +19,7 @@ deploy:
       - "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger_mac"
     draft: true
     overwrite: true
+    skip_cleanup: true
     on:
       tags: false
       
@@ -28,7 +31,7 @@ deploy:
   #    - "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger_linux"
   #    - "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger_mac"
   #  skip_cleanup: true
+  #  draft: false
+  #  overwrite: false
   #  on:
   #    tags: true
-  #    draft: false
-  #    overwrite: false
