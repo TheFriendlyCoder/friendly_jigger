@@ -10,19 +10,19 @@ script:
   - mv "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger_mac"
 deploy:
   - provider: releases
-    api_key: $DEPLOY_TOKEN
+    token: $DEPLOY_TOKEN
     file: 
       - "./friendly_jigger/bin/Release/net5.0/win10-x64/publish/friendly_jigger.exe"
       - "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger_linux"
       - "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger_mac"
-    skip_cleanup: true
+    draft: true
+    overwrite: true
     on:
       tags: false
-      draft: true
-      overwrite: true
+      
 
   #- provider: releases
-  #  api_key: $DEPLOY_TOKEN
+  #  token: $DEPLOY_TOKEN
   #  file: 
   #    - "./friendly_jigger/bin/Release/net5.0/win10-x64/publish/friendly_jigger.exe"
   #    - "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger_linux"
