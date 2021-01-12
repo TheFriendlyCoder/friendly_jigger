@@ -16,6 +16,11 @@ deploy:
     - "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger_linux"
     - "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger_mac"
   skip_cleanup: true
-  draft: true
-  #on:
-  #  tags: true
+  on:
+    tags: false
+    draft: true
+    overwrite: true
+  on:
+    tags: true
+    draft: false
+    overwrite: false
