@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using CommandLine;
 
 /*
  * In order to make this work with .NET 5.0 I had to enable 
@@ -24,7 +26,30 @@ namespace friendly_jigger
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(Run)
+                .WithNotParsed(HandleParseError);
+        }
+
+        private static void HandleParseError(IEnumerable<Error> errs)
+        {
+            if (errs.IsVersion())
+            {
+                Console.WriteLine("Version Request");
+                return;
+            }
+
+            if (errs.IsHelp())
+            {
+                Console.WriteLine("Help Request");
+                return;
+            }
+            Console.WriteLine("Parser Fail");
+        }
+
+        private static void Run(Options opts)
+        {
+            Console.WriteLine("Parser success");
         }
     }
 }
