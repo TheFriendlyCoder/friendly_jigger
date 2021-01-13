@@ -1,1 +1,2 @@
 * setup unit test for command line https://siderite.dev/blog/using-commandlineparser-in-way-friendly-to-depende/
+* figure out how to sign binaries
