@@ -4,7 +4,7 @@ mono: none
 dotnet: 5.0
 solution: friendly_jigger.sln
 script:
-  - '[ "$TRAVIS_TAG" == "" ] && export PROJ_VER=$TRAVIS_BUILD_NUMBER || export PROJ_VER=$TRAVIS_TAG'
+  - '[ "$TRAVIS_TAG" == "" ] && export PROJ_VER=0.0.$TRAVIS_BUILD_NUMBER.dev || export PROJ_VER=$TRAVIS_TAG'
   - dotnet publish -c Release -r win10-x64 /p:Version=$PROJ_VER
   - dotnet publish -c Release -r linux-x64 /p:Version=$PROJ_VER
   - mv "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger_linux"
