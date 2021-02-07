@@ -22,13 +22,15 @@ using CommandLine;
  */
 namespace friendly_jigger
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(Run)
-                .WithNotParsed(HandleParseError);
+            Console.WriteLine("Hello World");
+            //Parser.Default.ParseArguments<Options>(args)
+            //    .WithParsed(Run)
+            //    .WithNotParsed(HandleParseError);
+            return 0;
         }
 
         private static void HandleParseError(IEnumerable<Error> errs)

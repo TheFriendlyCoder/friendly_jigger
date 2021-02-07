@@ -3,12 +3,31 @@ language: csharp
 mono: none
 dotnet: 5.0
 solution: friendly_jigger.sln
+before_install:
+  - sudo apt-get update
+  # Needed for check_coverage.sh script
+  - sudo apt-get -y install libxml-xpath-perl
+  # NOTE: we have to use v3.0.0 or newer of the coveralls-net package
+  # but for some reason this package doesn't appear to be installable
+  # via nuget or the other .NET package tools, so we need to add
+  # a custom package source here to get the latest version
+  - dotnet tool restore --add-source https://ci.appveyor.com/nuget/coveralls-net-t37a9a9unhwk
+
 script:
-  - '[ "$TRAVIS_TAG" == "" ] && export PROJ_VER=0.0.$TRAVIS_BUILD_NUMBER.dev || export PROJ_VER=$TRAVIS_TAG'
-  - dotnet publish -c Release -r win10-x64 /p:Version=$PROJ_VER
-  - dotnet publish -c Release -r linux-x64 /p:Version=$PROJ_VER
+  - dotnet test --collect:"XPlat Code Coverage" -r ./coverage
+  # ensure test coverage is above 18%
+  - ./tests/check_coverage.sh 0.18
+  # publish coverage metrics
+  #- dotnet tool install --add-source https://ci.appveyor.com/nuget/coveralls-net-t37a9a9unhwk coveralls.net
+  - dotnet tool run reportgenerator "-reports:./coverage/**/coverage.cobertura.xml" "-targetdir:lcovreport" -reporttypes:lcov
+  - dotnet tool run csmacnz.Coveralls --lcov -i ./lcovreport/lcov.info
+  # extrapolate the version number
+  - '[ "$TRAVIS_TAG" == "" ] && export PROJ_VER=0.0.1.$TRAVIS_BUILD_NUMBER-dev || export PROJ_VER=$TRAVIS_TAG'
+  # publish binaries for all supported platforms
+  - dotnet publish -c Release -r win10-x64 /p:Version=$PROJ_VER friendly_jigger
+  - dotnet publish -c Release -r linux-x64 /p:Version=$PROJ_VER friendly_jigger
   - mv "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger_linux"
-  - dotnet publish -c Release -r osx-x64 /p:Version=$PROJ_VER
+  - dotnet publish -c Release -r osx-x64 /p:Version=$PROJ_VER friendly_jigger
   - mv "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger" "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger_mac"
 
 deploy:
