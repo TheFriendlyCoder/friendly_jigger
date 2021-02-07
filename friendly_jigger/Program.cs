@@ -27,6 +27,9 @@ namespace friendly_jigger
         public static int Main(string[] args)
         {
             Console.WriteLine("Hello World");
+            if (args.Length > 0) {
+                System.Console.WriteLine("Fubar");
+            }
             //Parser.Default.ParseArguments<Options>(args)
             //    .WithParsed(Run)
             //    .WithNotParsed(HandleParseError);

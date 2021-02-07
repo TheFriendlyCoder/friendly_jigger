@@ -9,7 +9,8 @@ namespace tests
         [Fact]
         public void TestNoOp()
         {
-            string[] args = new string[0];
+            string[] args = new string[] {"Hello"};
+            //string[] args = new string[0];
 
             int exitCode = Program.Main(args);
             Assert.Equal(0, exitCode);
