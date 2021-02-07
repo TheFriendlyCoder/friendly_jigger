@@ -33,25 +33,25 @@ namespace friendly_jigger
             return 0;
         }
 
-        private static void HandleParseError(IEnumerable<Error> errs)
-        {
-            if (errs.IsVersion())
-            {
-                Console.WriteLine("Version Request");
-                return;
-            }
+        // private static void HandleParseError(IEnumerable<Error> errs)
+        // {
+        //     if (errs.IsVersion())
+        //     {
+        //         Console.WriteLine("Version Request");
+        //         return;
+        //     }
 
-            if (errs.IsHelp())
-            {
-                Console.WriteLine("Help Request");
-                return;
-            }
-            Console.WriteLine("Parser Fail");
-        }
+        //     if (errs.IsHelp())
+        //     {
+        //         Console.WriteLine("Help Request");
+        //         return;
+        //     }
+        //     Console.WriteLine("Parser Fail");
+        // }
 
-        private static void Run(Options opts)
-        {
-            Console.WriteLine("Parser success");
-        }
+        // private static void Run(Options opts)
+        // {
+        //     Console.WriteLine("Parser success");
+        // }
     }
 }

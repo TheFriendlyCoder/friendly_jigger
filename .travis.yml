@@ -14,13 +14,9 @@ before_install:
   - dotnet tool restore --add-source https://ci.appveyor.com/nuget/coveralls-net-t37a9a9unhwk
 
 script:
-  - dotnet test --collect:"XPlat Code Coverage" -r ./coverage
-  # ensure test coverage is above 18%
-  - ./tests/check_coverage.sh 0.18
+  - dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=$PWD/coverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90
   # publish coverage metrics
-  #- dotnet tool install --add-source https://ci.appveyor.com/nuget/coveralls-net-t37a9a9unhwk coveralls.net
-  - dotnet tool run reportgenerator "-reports:./coverage/**/coverage.cobertura.xml" "-targetdir:lcovreport" -reporttypes:lcov
-  - dotnet tool run csmacnz.Coveralls --lcov -i ./lcovreport/lcov.info
+  - dotnet tool run csmacnz.Coveralls --opencover -i ./coverage/coverage.opencover.xml
   # extrapolate the version number
   - '[ "$TRAVIS_TAG" == "" ] && export PROJ_VER=0.0.1.$TRAVIS_BUILD_NUMBER-dev || export PROJ_VER=$TRAVIS_TAG'
   # publish binaries for all supported platforms

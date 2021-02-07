@@ -3,9 +3,13 @@
 * write some setup docs (ie: adding coverageio app token as an env var to the travis ci build to publish coveage data)
 * see if we can use coveralls.io to manage the minimum coverage threshold
 * document how to add new build tools using "dotnet tool install <xyz>"
+* try to set up a runsettings.xml file
+* * https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/VSTestIntegration.md
+* * https://docs.microsoft.com/en-us/visualstudio/test/configure-unit-tests-by-using-a-dot-runsettings-file?view=vs-2019
 
 Helpful Links
 =============
 * https://andrewlock.net/version-vs-versionsuffix-vs-packageversion-what-do-they-all-mean/
 * https://andrewlock.net/version-vs-versionsuffix-vs-packageversion-what-do-they-all-mean/#how-to-set-the-version-number-when-you-build-your-app-library
 * Tool for managing local tool manifest in ./.config folder: https://docs.microsoft.com/en-us/dotnet/core/tools/local-tools-how-to-use
+* Docs on code coverage tool: https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/GlobalTool.md
