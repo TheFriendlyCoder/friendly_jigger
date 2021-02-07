@@ -2,16 +2,26 @@
 
 # Uncomment this line to install local build tools
 # dotnet tool restore --add-source https://ci.appveyor.com/nuget/coveralls-net-t37a9a9unhwk
+# dotnet tool install --add-source https://ci.appveyor.com/nuget/coveralls-net-t37a9a9unhwk coveralls.net
 
 rm -rf coverage
-rm -rf coveragereport
 
-dotnet test --collect:"XPlat Code Coverage" -r ./coverage
-./tests/check_coverage.sh 0.18
+#dotnet test --collect:"XPlat Code Coverage" -r ./coverage
+#dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=$PWD/opencoverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90 /p:ThresholdType=line
+dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=$PWD/coverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90
+#find . -name "*.json" | grep coverage.json || (echo "Not found";exit -1;)
+#echo "Completed successfully"
+#./tests/check_coverage.sh 0.18
 
-reportgenerator "-reports:./coverage/**/coverage.cobertura.xml" "-targetdir:coveragereport" -reporttypes:Html
+reportgenerator "-reports:./coverage/coverage.opencover.xml" "-targetdir:coverage/html" -reporttypes:Html
+open ./coverage/html/index.html
 
 # Sample for publishing coveralls data
+
+# To run these samples, you'll need to create a file called 'coveralls.token' with the token
+# for this project. Log in to coveralls.io, locate this project, click on settings and load
+# the deployment token for this library, then paste it into the file.
+
 # looks like the default coverage format produced by xunit isn't compatible
 # with coveralls.io, so we first need to convert it to a format that it recognizes
 # Using the reportgenerator tool, and looking for a format it supports that is
@@ -27,5 +37,5 @@ reportgenerator "-reports:./coverage/**/coverage.cobertura.xml" "-targetdir:cove
 
 # The line below is what should work according to the docs, using the original
 # report data, but it does not work in practice
-#dotnet tool run csmacnz.Coveralls --opencover -i ./coverage/**/coverage.cobertura.xml --useRelativePaths --basePath "$PWD/friendly_jigger" --repoToken `cat coveralls.token` --commitBranch ksp_test --commitAuthor "Kevin Phillips" --commitEmail "thefriendlycoder@gmail.com" --commitId ABCD1234 --commitMessage "From local laptop" --jobId 1237
+#dotnet tool run csmacnz.Coveralls --opencover -i ./opencoverage/coverage.opencover.xml --repoToken `cat coveralls.token` --useRelativePaths --basePath "$PWD/friendly_jigger" --jobId 100
 

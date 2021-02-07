@@ -339,6 +339,5 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 coverage/
-coveragereport/
-lcovreport/
 .vscode/
+coveralls.token
