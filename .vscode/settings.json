@@ -1,0 +1,14 @@
+{
+    "dotnet-test-explorer.enableTelemetry": false,
+    "coverage-gutters.showLineCoverage": true,
+    "coverage-gutters.showRulerCoverage": true,
+    "coverage-gutters.coverageFileNames": [
+        "coverage.info",
+        "lcov.info",
+        "coverage.opencover.xml",
+        "cov.xml",
+        "coverage.xml",
+        "jacoco.xml"
+    ],
+    "dotnet-test-explorer.testArguments": "/p:CollectCoverage=true /p:CoverletOutput=../coverage/ /p:CoverletOutputFormat=lcov"
+}

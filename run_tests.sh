@@ -8,13 +8,15 @@ rm -rf coverage
 
 #dotnet test --collect:"XPlat Code Coverage" -r ./coverage
 #dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=$PWD/opencoverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90 /p:ThresholdType=line
-dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=$PWD/coverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90
+dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=$PWD/coverage/ /p:CoverletOutputFormat=lcov /p:Threshold=90
 #find . -name "*.json" | grep coverage.json || (echo "Not found";exit -1;)
 #echo "Completed successfully"
 #./tests/check_coverage.sh 0.18
 
-reportgenerator "-reports:./coverage/coverage.opencover.xml" "-targetdir:coverage/html" -reporttypes:Html
+reportgenerator "-reports:./coverage/coverage.info" "-targetdir:coverage/html" -reporttypes:Html
 open ./coverage/html/index.html
+
+#reportgenerator "-reports:./coverage/coverage.opencover.xml" "-targetdir:coverage" -reporttypes:lcov
 
 # Sample for publishing coveralls data
 
