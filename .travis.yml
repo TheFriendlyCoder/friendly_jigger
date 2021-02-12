@@ -1,4 +1,5 @@
 os: linux
+dist: xenial
 language: csharp
 mono: none
 dotnet: 5.0
@@ -16,7 +17,10 @@ before_install:
 script:
   - dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=$PWD/coverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90
   # publish coverage metrics
-  - dotnet tool run csmacnz.Coveralls --opencover -i ./coverage/coverage.opencover.xml
+  - '[ "$TRAVIS_PULL_REQUEST" == "false" ] || export PR_PARAM="--pullRequest $TRAVIS_PULL_REQUEST" && echo "Non Pull Request"'
+  - printenv
+  #- dotnet tool run csmacnz.Coveralls --opencover -i ./coverage/coverage.opencover.xml --useRelativePaths --commitBranch $TRAVIS_BRANCH --commitId $TRAVIS_COMMIT --commitMessage "$TRAVIS_COMMIT_MESSAGE" --jobId $TRAVIS_BUILD_NUMBER
+  - dotnet tool run csmacnz.Coveralls --opencover -i ./coverage/coverage.opencover.xml --useRelativePaths --commitBranch $TRAVIS_BRANCH --commitMessage "$TRAVIS_COMMIT_MESSAGE"
   # extrapolate the version number
   - '[ "$TRAVIS_TAG" == "" ] && export PROJ_VER=0.0.1.$TRAVIS_BUILD_NUMBER-dev || export PROJ_VER=$TRAVIS_TAG'
   # publish binaries for all supported platforms
