@@ -13,6 +13,12 @@
       "commands": [
         "csmacnz.Coveralls"
       ]
+    },
+    "trx2junit": {
+      "version": "1.4.1",
+      "commands": [
+        "trx2junit"
+      ]
     }
   }
 }

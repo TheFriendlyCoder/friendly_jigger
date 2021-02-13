@@ -1,0 +1,95 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.2.0
+
+commands:
+  build_cmd:
+    steps:
+      - checkout
+      - run:
+          name: Build
+          command: |
+            dir env:
+            cat version.txt
+            Set-Item -Path Env:PROJ_VER -Value $(cat version.txt)
+            echo "Project version is $Env:PROJ_VER"
+            
+            dotnet publish -c Release -r win10-x64 /p:Version=$Env:PROJ_VER friendly_jigger
+            Rename-Item -Path "./friendly_jigger/bin/Release/net5.0/win10-x64/publish/friendly_jigger.exe" -NewName "friendly_jigger_windows.exe"
+            dotnet publish -c Release -r linux-x64 /p:Version=$Env:PROJ_VER friendly_jigger
+            Rename-Item -Path "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger" -NewName "friendly_jigger_linux"
+            dotnet publish -c Release -r osx-x64 /p:Version=$Env:PROJ_VER friendly_jigger
+            Rename-Item -Path "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger" -NewName "friendly_jigger_macos"
+      - store_artifacts:
+          path: ./friendly_jigger/bin/Release/net5.0/win10-x64/publish/friendly_jigger_windows.exe
+      - store_artifacts:
+          path: ./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger_linux
+      - store_artifacts:
+          path: ./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger_macos
+      - persist_to_workspace:
+          root: ./friendly_jigger/bin/Release/net5.0
+          paths:
+            - win10-x64/publish/friendly_jigger_windows.exe
+            - linux-x64/publish/friendly_jigger_linux
+            - osx-x64/publish/friendly_jigger_macos
+  publish_cmd:
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./artifacts
+      - run:
+          name: Publish
+          command: |
+            dir -r artifacts
+            Set-Item -Path Env:COMMIT_MESSAGE -Value $(git log --format=%B -n 1 $Env:CIRCLE_SHA1)
+            echo "COMMIT_MESSAGE env var is $Env:COMMIT_MESSAGE"
+            dotnet tool install --add-source "https://ci.appveyor.com/nuget/coveralls-net-t37a9a9unhwk" coveralls.net
+            dotnet tool run csmacnz.Coveralls --opencover -i "./artifacts/coverage.opencover.xml" --useRelativePaths --commitId "$Env:CIRCLE_SHA1" --commitBranch "$Env:CIRCLE_BRANCH" --commitAuthor "$Env:CIRCLE_USERNAME" --jobId "$Env:CIRCLE_BUILD_NUM" --serviceName circleci --commitMessage "$Env:COMMIT_MESSAGE"
+
+jobs:
+  build_prerelease:
+    executor: win/default   
+    steps:
+      - run:
+          command: echo "0.0.1.$Env:CIRCLE_BUILD_NUM-dev" > version.txt
+      - build_cmd
+  
+  test:
+    executor: win/default
+    steps:
+      - checkout
+      - run: 
+          name: Tests 
+          command: |
+            dotnet test --logger "trx;LogFileName=loggerFile.trx" ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=./coverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90
+            dotnet tool install trx2junit
+            dotnet tool run trx2junit tests/TestResults/*.trx
+      - store_test_results:
+          path: tests/TestResults
+      - persist_to_workspace:
+          root: ./tests/coverage
+          paths:
+            - coverage.opencover.xml
+
+  publish_prerelease:
+    executor: win/default
+    steps:
+      - publish_cmd
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build_prerelease:
+          filters:
+            tags:
+              ignore: /\.*/
+      - test
+      - publish_prerelease:
+          filters:
+            tags:
+              ignore: /\.*/
+          requires:
+            - build_prerelease
+            - test
