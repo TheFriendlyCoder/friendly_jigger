@@ -14,6 +14,7 @@
 * custom settings for the .NET text explorer causes the coverage.info file to be regenerated automatically when you run all tests in the suite
 * debugging a test from the test explorer pane doesn't work, but clicking the debug test link in the code
 lens overlay on top of a test seems to work
+* generate changes list for Github release based on query of PR or Github issues / Jira issues
 
 Test Setup Notes:
 =================

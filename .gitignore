@@ -341,3 +341,7 @@ healthchecksdb
 coverage/
 coveralls.token
 github.token
+# The circleci plugin for vs code stores the API
+# token for the admin user in plain text in the setting.json
+# file, so we need to exclude this from the repo
+.vscode/settings.json
