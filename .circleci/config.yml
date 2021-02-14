@@ -138,8 +138,12 @@ workflows:
             branches:
               ignore: /.*/
             tags:
+              # NOTE: we can't run builds for every tag
+              # because pre-release builds generate tags
+              # and we don't want an infinite loop building
+              # against those tags
               only: /^\d+\.\d+\.\d+$/
-              
+
       - test:
           filters:
             tags:
@@ -172,10 +176,10 @@ workflows:
             tags:
               only: /^\d+\.\d+\.\d+$/
           requires:
-            - build_prerelease
+            - build_release
             - test
 
-# TODO: Test PR integration with GHE
+
 # TODO: consider consolidating all build jobs into 1 to improve build performance            
 # TODO: consider loading version number from project and using for prereleases
 #       then using the -recreate flag to overwrite tag for prerelease (ie: 0.0.1-dev)
