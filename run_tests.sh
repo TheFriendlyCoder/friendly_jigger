@@ -4,17 +4,20 @@
 # dotnet tool restore --add-source https://ci.appveyor.com/nuget/coveralls-net-t37a9a9unhwk
 # dotnet tool install --add-source https://ci.appveyor.com/nuget/coveralls-net-t37a9a9unhwk coveralls.net
 
-rm -rf coverage
+rm -rf tests/coverage
+rm -rf tests/TestResults
 
 #dotnet test --collect:"XPlat Code Coverage" -r ./coverage
-#dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=$PWD/opencoverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90 /p:ThresholdType=line
-dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=$PWD/coverage/ /p:CoverletOutputFormat=lcov /p:Threshold=90
+dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=./coverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90 /p:ThresholdType=line
+dotnet test --logger "trx;LogFileName=loggerFile.trx" ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=./coverage/ /p:CoverletOutputFormat=lcov /p:Threshold=90
+dotnet tool run trx2junit tests/TestResults/*.trx
+
 #find . -name "*.json" | grep coverage.json || (echo "Not found";exit -1;)
 #echo "Completed successfully"
 #./tests/check_coverage.sh 0.18
 
-reportgenerator "-reports:./coverage/coverage.info" "-targetdir:coverage/html" -reporttypes:Html
-open ./coverage/html/index.html
+reportgenerator "-reports:./tests/coverage/coverage.info" "-targetdir:./tests/coverage/html" -reporttypes:Html
+open ./tests/coverage/html/index.html
 
 #reportgenerator "-reports:./coverage/coverage.opencover.xml" "-targetdir:coverage" -reporttypes:lcov
 
