@@ -62,8 +62,6 @@ commands:
             tar --no-same-owner -xzf ghr.tar.gz
             curl -L https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz --output hub.tgz
             tar --no-same-owner -xzf hub.tgz
-            export PATH=$PATH:`echo ./hub-linux**/bin`
-            ./clean_drafts.sh
 
 jobs:
   build_prerelease:
@@ -102,6 +100,9 @@ jobs:
           command: |
             export PROJ_VER=`cat ./artifacts/version.txt`
             echo "Project version in $PROJ_VER"
+            # Clean up any previously deploy drafts
+            export PATH=$PATH:`echo ./hub-linux**/bin`
+            ./clean_drafts.sh
             ./ghr_**/ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_BRANCH} -recreate -draft $PROJ_VER "./artifacts/binaries"
 
   publish_prerelease:
