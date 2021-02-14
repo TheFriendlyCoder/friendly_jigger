@@ -137,8 +137,8 @@ workflows:
           filters:
             branches:
               ignore: /.*/
-            # tags:
-            #   only: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
       - test
       - publish_fork:
           filters:
@@ -164,8 +164,8 @@ workflows:
           filters:
             branches:
               ignore: /.*/
-            # tags:
-            #   only: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
           requires:
             - build_prerelease
             - test
@@ -174,4 +174,3 @@ workflows:
 # TODO: consider consolidating all build jobs into 1 to improve build performance            
 # TODO: consider loading version number from project and using for prereleases
 #       then using the -recreate flag to overwrite tag for prerelease (ie: 0.0.1-dev)
-# TODO: test prerelease and release builds
