@@ -17,7 +17,6 @@ commands:
             mv "./friendly_jigger/bin/Release/net5.0/win10-x64/publish/friendly_jigger.exe" "./binaries/friendly_jigger_windows.exe"
             mv "./friendly_jigger/bin/Release/net5.0/linux-x64/publish/friendly_jigger" "./binaries/friendly_jigger_linux"
             mv "./friendly_jigger/bin/Release/net5.0/osx-x64/publish/friendly_jigger" "./binaries/friendly_jigger_macos"
-            
 
       - store_artifacts:
           path: ./binaries
@@ -26,6 +25,7 @@ commands:
           paths:
             - ./binaries/*
             - version.txt
+            - ./dockfx_project/_site/*
 
   test_cmd:
     steps:
@@ -63,6 +63,26 @@ commands:
             curl -L https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz --output hub.tgz
             tar --no-same-owner -xzf hub.tgz
 
+  pre_publish_docs_cmd:
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./artifacts
+      - run:
+          name: Install and configure dependencies
+          command: |
+            # Have to peg the gh-pages version because the latest
+            # version throws errors
+            npm install -g --silent gh-pages@3.0.0
+            git config user.email "ci-build@thefriendlycoder.com"
+            git config user.name "ci-build"
+      - run:
+          name: Disable jekyll builds
+          command: touch ./artifacts/docfx_project/_site/.nojekyll
+      - add_ssh_keys:
+          fingerprints:
+            - "3b:a0:a2:63:8f:7e:ca:ac:dc:7e:68:b5:f4:89:62:45"
+
 jobs:
   build_prerelease:
     docker:
@@ -85,6 +105,23 @@ jobs:
             echo $CIRCLE_TAG > version.txt
       - build_cmd
   
+  build_docs:
+    docker:
+      - image: mono:latest
+    steps:
+      - checkout
+      - run:
+          command: |
+            apt update
+            apt install -y unzip
+            curl -L https://github.com/dotnet/docfx/releases/latest/download/docfx.zip -o docfx.zip
+            unzip -d .docfx docfx.zip
+            mono ./.docfx/docfx.exe ./docfx_project/docfx.json
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./docfx_project/_site/*
+
   test:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:5.0
@@ -126,6 +163,29 @@ jobs:
             echo "Project version in $PROJ_VER"
             ./ghr_**/ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} $PROJ_VER "./artifacts/binaries"
 
+  publish_prerelease_docs:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - pre_publish_docs_cmd
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: |
+            gh-pages -e latest --dotfiles --message "[skip ci] Updates" --dist ./artifacts/docfx_project/_site
+
+  publish_release_docs:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - pre_publish_docs_cmd
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: |
+            export PROJ_VER=`cat ./artifacts/version.txt`
+            echo "Project version in $PROJ_VER"
+            gh-pages -e $PROJ_VER --dotfiles --message "[skip ci] Updates" --dist ./artifacts/docfx_project/_site
+          
+
 workflows:
   version: 2
   build_and_test:
@@ -138,6 +198,19 @@ workflows:
           filters:
             branches:
               ignore: /.*/
+            tags:
+              # NOTE: we can't run builds for every tag
+              # because pre-release builds generate tags
+              # and we don't want an infinite loop building
+              # against those tags
+              only: /^\d+\.\d+\.\d+$/
+      - build_docs:
+          requires:
+            - build_prerelease
+            - build_release
+          filters:
+            branches:
+              only: /.*/
             tags:
               # NOTE: we can't run builds for every tag
               # because pre-release builds generate tags
@@ -179,6 +252,23 @@ workflows:
           requires:
             - build_release
             - test
+      - publish_prerelease_docs:
+          filters:
+            branches:
+              only:
+                - master
+            tags:
+              ignore: /.*/
+          requires:
+            - build_docs
+      - publish_release_docs:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+          requires:
+            - build_docs
 
 
 # TODO: consider consolidating all build jobs into 1 to improve build performance            

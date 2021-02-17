@@ -8,7 +8,7 @@ rm -rf tests/coverage
 rm -rf tests/TestResults
 
 #dotnet test --collect:"XPlat Code Coverage" -r ./coverage
-dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=./coverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90 /p:ThresholdType=line
+#dotnet test ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=./coverage/ /p:CoverletOutputFormat=opencover /p:Threshold=90 /p:ThresholdType=line
 dotnet test --logger "trx;LogFileName=loggerFile.trx" ./tests/tests.csproj /p:CollectCoverage=true /p:CoverletOutput=./coverage/ /p:CoverletOutputFormat=lcov /p:Threshold=90
 dotnet tool run trx2junit tests/TestResults/*.trx
 
