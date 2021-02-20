@@ -204,5 +204,7 @@ workflows:
 # TODO: consider loading version number from project and using for prereleases
 #       then using the -recreate flag to overwrite tag for prerelease (ie: 0.0.1-dev)
 # TODO: see if we can preserve build dependencies between builds using the cache
-#8      mechanism to further speed up builds
+#       mechanism to further speed up builds
 # TODO: see if we can eliminate unnecessary compile operations from test suite
+# TODO: see if there's a way to skip certain build steps that may not be needed,
+#8      like skipping compile and test when no source code is touched
