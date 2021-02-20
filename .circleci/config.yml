@@ -108,7 +108,7 @@ jobs:
             then
               # for master branches we need to set flags to show the release is
               # a prerelease and should overwrite any previous prerelease builds
-              export GHR_PARAMS=-recreate -prerelease
+              export GHR_PARAMS="-recreate -prerelease"
             else
               if [ -z "${CIRCLE_TAG}" ]
               then
@@ -119,7 +119,7 @@ jobs:
 
                 # then we have to set the GHR flags to indicate this is a draft
                 # release so the tool doesn't create any tags for the release
-                export GHR_PARAMS=${GHR_PARAMS:-"-recreate -draft"}
+                export GHR_PARAMS="-recreate -draft"
                 #[[ -z "${CIRCLE_PULL_REQUEST}" ]] || export GHR_PARAMS=-recreate -draft
               fi
               # NOTE: for release builds there are no GHR_PARAMS needed
