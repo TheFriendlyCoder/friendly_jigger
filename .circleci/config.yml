@@ -156,7 +156,7 @@ jobs:
             # prerelease buils will publish to a folder called "latest"
             [[ -z "${CIRCLE_TAG}" ]] && export DOC_DIR="latest" || export DOC_DIR=`cat ./artifacts/version.txt` 
             echo Publishing to $DOC_DIR
-            gh-pages -e $DOC_DIR --dotfiles --message "[skip ci] Updates" --dist ./artifacts/docfx_project/_site          
+            gh-pages -e $DOC_DIR --dotfiles --message "[skip ci] Updates from ${CIRCLE_BRANCH:-$CIRCLE_TAG}" --dist ./artifacts/docfx_project/_site          
 
 workflows:
   version: 2
