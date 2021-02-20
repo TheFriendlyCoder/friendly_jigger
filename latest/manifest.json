@@ -4,48 +4,12 @@
   "xrefmap": "xrefmap.yml",
   "files": [
     {
-      "type": "ManagedReference",
-      "source_relative_path": "api/friendly_jigger.Program.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/friendly_jigger.Program.html",
-          "hash": "YoXvsOrPL90A9OhIHcgYbA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/friendly_jigger.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/friendly_jigger.html",
-          "hash": "/6skpcyOVo7XEBJ0ss+QBw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
       "type": "Conceptual",
       "source_relative_path": "api/index.md",
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "Fez2LAJlA/LcxwsSJvD1Lg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Toc",
-      "source_relative_path": "api/toc.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/toc.html",
-          "hash": "LekDlrVe8TiMpO2GfDr3MQ=="
+          "hash": "PelkJO917XXHfqjiayzUmA=="
         }
       },
       "is_incremental": false,
@@ -93,7 +57,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "+rHUkRZHZRi5gd1aTU6lJA=="
+          "hash": "pKV8tlE0iQhgO9RLvAvDPw=="
         }
       },
       "is_incremental": false,
@@ -115,12 +79,6 @@
           "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 3,
-          "skipped_file_count": 0
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 2,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {
