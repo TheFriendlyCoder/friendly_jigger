@@ -124,7 +124,7 @@ jobs:
               fi
               # NOTE: for release builds there are no GHR_PARAMS needed
             fi
-            echo Params are ${GHR_PARAMS}
+            echo "Params are ${GHR_PARAMS}"
 
             # Now perform our publish
             ./ghr_**/ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_BRANCH} $GHR_PARAMS $PROJ_VER "./artifacts/binaries"
