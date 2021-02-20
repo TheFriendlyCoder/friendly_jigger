@@ -22,8 +22,18 @@ using CommandLine;
  */
 namespace friendly_jigger
 {
+    /// <summary>
+    /// Command line interface for generating project templates
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Entrypoint for our command line interface
+        /// </summary>
+        /// <returns>
+        /// error code to return to the shell
+        /// </returns>
+        /// <param name="args">command line args passed to the application</param>
         public static int Main(string[] args)
         {
             Console.WriteLine("Hello World");
