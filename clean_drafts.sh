@@ -5,6 +5,11 @@
 # pass each line from the input stream to the 'hub' command, substituting {} for the release ID: xargs -I{} 
 # perform a deletion on each draft release ID using the Github API: hub api -X DELETE /repos/TheFriendlyCoder/friendly_jigger/releases/{}
 
+# Inject the GitHub API token when available
+# useful when running this script locally - just put your GHE API
+# token in a file name "github.token" in the current folder
+[[ -e "github.token" ]] && export GITHUB_TOKEN=`cat github.token`
+
 export draft_json=`hub api -X GET /repos/TheFriendlyCoder/friendly_jigger/releases | jq '.[] | select(.draft == true) | {id: .id, tag: .tag_name, draft: .draft, prerelease: .prerelease, branch: .target_commitish, url: .html_url}'`
 if [ "$draft_json" == "" ]
 then
@@ -15,7 +20,8 @@ else
     echo $draft_json | jq '.'
 fi
 
-echo $draft_json | jq '.' | grep id | sed "s/  \"id\": //" | xargs -I{} hub api -X DELETE /repos/TheFriendlyCoder/friendly_jigger/releases/{}
+echo $draft_json | jq '.' | grep \"id\": | sed "s/  \"id\": //" | xargs -I{} echo "Purging draft with ID {}"
+echo $draft_json | jq '.' | grep \"id\": | sed "s/  \"id\": //" | xargs -I{} hub api -X DELETE /repos/TheFriendlyCoder/friendly_jigger/releases/{}
 echo "Draft releases purged successfully"
 
 # show list of IDs of draft releases
