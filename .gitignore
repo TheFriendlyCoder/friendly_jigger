@@ -345,3 +345,4 @@ github.token
 # token for the admin user in plain text in the setting.json
 # file, so we need to exclude this from the repo
 .vscode/settings.json
+build/*

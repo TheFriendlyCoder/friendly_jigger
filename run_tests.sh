@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Uncomment this line to install local build tools
 # dotnet tool restore --add-source https://ci.appveyor.com/nuget/coveralls-net-t37a9a9unhwk

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using CommandLine;
 
@@ -35,36 +35,32 @@ namespace friendly_jigger
         /// </returns>
         /// <param name="args">command line args passed to the application</param>
         public static int Main(string[] args)
-        {
-            Console.WriteLine("Hello World");
-            if (args.Length > 0) {
-                System.Console.WriteLine("Fubar");
-            }
-            //Parser.Default.ParseArguments<Options>(args)
-            //    .WithParsed(Run)
-            //    .WithNotParsed(HandleParseError);
+        {           
+            Parser.Default.ParseArguments<Options>(args)
+               .WithParsed(Run)
+               .WithNotParsed(HandleParseError);
             return 0;
         }
 
-        // private static void HandleParseError(IEnumerable<Error> errs)
-        // {
-        //     if (errs.IsVersion())
-        //     {
-        //         Console.WriteLine("Version Request");
-        //         return;
-        //     }
+        private static void HandleParseError(IEnumerable<Error> errs)
+        {
+            if (errs.IsVersion())
+            {
+                System.Console.WriteLine("Version called");
+                return;
+            }
 
-        //     if (errs.IsHelp())
-        //     {
-        //         Console.WriteLine("Help Request");
-        //         return;
-        //     }
-        //     Console.WriteLine("Parser Fail");
-        // }
+            if (errs.IsHelp())
+            {
+                System.Console.WriteLine("Help called");
+                return;
+            }
+            Console.WriteLine("Parser Fail");
+        }
 
-        // private static void Run(Options opts)
-        // {
-        //     Console.WriteLine("Parser success");
-        // }
+        private static void Run(Options opts)
+        {
+            Console.WriteLine("Parser success");
+        }
     }
 }
